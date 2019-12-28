@@ -13,8 +13,8 @@ import (
 type headers map[string]string
 
 type requestData struct {
-	security_hash  string
-	domain_user_id string
+	Security_hash  string `json:"security_hash"`
+	Domain_user_id string `json:"domain_user_id"`
 }
 
 type transferData struct {
@@ -86,10 +86,10 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 	if out.csrf_token, ok = findVar(`<meta name="csrf-token" content="`, body); !ok {
 		return out, errors.New("Unable to get csrf token")
 	}
-	if out.req_data.security_hash, ok = findVar(`"security_hash":"`, body); !ok {
+	if out.req_data.Security_hash, ok = findVar(`"security_hash":"`, body); !ok {
 		return out, errors.New("Unable to get security hash")
 	}
-	if out.req_data.domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
+	if out.req_data.Domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
 		return out, errors.New("Unable to get domain user id")
 	}
 	if out.wt_session, ok = getCookieValue("_wt_session", resp); !ok {
