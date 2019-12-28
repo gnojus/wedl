@@ -120,15 +120,15 @@ func findVar(prefix string, body []byte) (out string, exists bool) {
 func createRequest(
 	method string, URL string, headers map[string]string, body interface{},
 ) (req *http.Request, err error) {
-	var buff *bytes.Buffer
 	if body != nil {
 		jsonStr, err := json.Marshal(body)
 		if err != nil {
 			return req, err
 		}
-		buff = bytes.NewBuffer(jsonStr)
+		req, err = http.NewRequest(method, URL, bytes.NewBuffer(jsonStr))
+	} else {
+		req, err = http.NewRequest(method, URL, nil)
 	}
-	req, err = http.NewRequest(method, URL, buff)
 	if err != nil {
 		return
 	}
