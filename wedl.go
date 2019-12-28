@@ -16,6 +16,7 @@ Usage:
 
 Options:
   -h --help              Show this screen.
+  -v --version           Print version and exit.
   -o FILE --output=FILE  Output file. Use - for stdout.
   -p PATH --path=PATH	 Downloaded files directory.
   -s --silent            Silent. Do not output anything to stderr.
