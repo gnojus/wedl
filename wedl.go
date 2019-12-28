@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+var version string
+
 func main() {
 	usage := `
 Usage:
@@ -19,7 +21,7 @@ Options:
   -s --silent            Silent. Do not output anything to stderr.
   -f --force             Overwrite files if needed.
   `
-	opts, _ := docopt.ParseDoc(usage)
+	opts, _ := docopt.ParseArgs(usage, os.Args[1:], version)
 	err := cli.Eval(opts)
 	if err != nil {
 		if !opts["--silent"].(bool) {
