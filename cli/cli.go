@@ -14,10 +14,10 @@ func Eval(opts map[string]interface{}) (err error) {
 		return
 	}
 	resp, err := transfer.GetDownloadResponse(parsed.Url)
-	defer resp.Body.Close()
 	if err != nil {
 		return
 	}
+	defer resp.Body.Close()
 	if parsed.Output == "" {
 		parsed.Output = transfer.FilenameFromUrl(resp.Request.URL.String())
 	}
