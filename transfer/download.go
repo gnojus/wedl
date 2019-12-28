@@ -10,6 +10,8 @@ import (
 	"regexp"
 )
 
+const baseApi string = "https://wetransfer.com/api/v4"
+
 type headers map[string]string
 
 type requestData struct {
@@ -24,7 +26,7 @@ type transferData struct {
 	req_data    requestData
 }
 
-func GetDownloadResponse(URL string) (out *io.ReadCloser, err error) {
+func GetDownloadResponse(URL string) (response *http.Response, err error) {
 	client := &http.Client{}
 	req, err := createRequest("GET", URL, nil, nil)
 	if err != nil {
@@ -46,14 +48,16 @@ func GetDownloadResponse(URL string) (out *io.ReadCloser, err error) {
 }
 
 func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
-	req, err := createRequest("POST", URL, headers{
+	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transfer_id)
+	req, err := createRequest("POST", url, headers{
 		"x-csrf-token": data.csrf_token,
-		"cookie":       data.wt_session,
+		"cookie":       "_wt_session=" + data.wt_session,
 		"content-type": "application/json",
 	}, data.req_data)
 	if err != nil {
 		return
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return
@@ -62,8 +66,9 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	if err != nil {
 		return
 	}
+
 	var result map[string]interface{}
-	err = json.Unmarshal(body, &data)
+	err = json.Unmarshal(body, &result)
 	if err != nil {
 		return
 	}
