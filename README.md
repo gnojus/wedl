@@ -28,5 +28,6 @@ Download and install binaries from [here](https://github.com/Nojus297/wedl/relea
 Or compile from source:
 ```bash
 $ git clone https://github.com/Nojus297/wedl.git
+$ cd wedl 
 $ make
 ```
