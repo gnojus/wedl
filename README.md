@@ -23,11 +23,15 @@ Options:
 ```
 
 ## Instaling
-Download and install binaries from [here](https://github.com/Nojus297/wedl/releases). 
+Download binaries from [here](https://github.com/Nojus297/wedl/releases). 
 
 Or compile from source:
 ```bash
 $ git clone https://github.com/Nojus297/wedl.git
 $ cd wedl 
 $ make
+```
+Or just go get:
+```bash
+$ go get github.com/Nojus297/wedl
 ```
