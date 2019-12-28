@@ -23,7 +23,7 @@ Options:
 	err := cli.Eval(opts)
 	if err != nil {
 		if !opts["--silent"].(bool) {
-			fmt.Fprint(os.Stderr, err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 		os.Exit(1)
 	}
