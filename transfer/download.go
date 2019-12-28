@@ -10,6 +10,8 @@ import (
 	"regexp"
 )
 
+type headers map[string]string
+
 type requestData struct {
 	security_hash  string
 	domain_user_id string
@@ -19,7 +21,7 @@ type transferData struct {
 	transfer_id string
 	csrf_token  string
 	wt_session  string
-	data        requestData
+	req_data    requestData
 }
 
 func GetDownloadResponse(URL string) (out *io.ReadCloser, err error) {
@@ -28,7 +30,47 @@ func GetDownloadResponse(URL string) (out *io.ReadCloser, err error) {
 	if err != nil {
 		return
 	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	data, err := getTransferData(resp)
+	if err != nil {
+		return
+	}
+	link, err := getDownloadLink(client, data)
+	if err != nil {
+		return
+	}
 	return
+}
+
+func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
+	req, err := createRequest("POST", URL, headers{
+		"x-csrf-token": data.csrf_token,
+		"cookie":       data.wt_session,
+		"content-type": "application/json",
+	}, data.req_data)
+	if err != nil {
+		return
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	var result map[string]interface{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return
+	}
+	if URL, ok := result["direct_link"].(string); ok {
+		return URL, nil
+	}
+	return "", errors.New("Unable to find direct link")
 }
 
 func getTransferData(resp *http.Response) (out transferData, err error) {
@@ -44,10 +86,10 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 	if out.csrf_token, ok = findVar(`<meta name="csrf-token" content="`, body); !ok {
 		return out, errors.New("Unable to get csrf token")
 	}
-	if out.data.security_hash, ok = findVar(`"security_hash":"`, body); !ok {
+	if out.req_data.security_hash, ok = findVar(`"security_hash":"`, body); !ok {
 		return out, errors.New("Unable to get security hash")
 	}
-	if out.data.domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
+	if out.req_data.domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
 		return out, errors.New("Unable to get domain user id")
 	}
 	if out.wt_session, ok = getCookieValue("_wt_session", resp); !ok {
