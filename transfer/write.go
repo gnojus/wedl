@@ -30,7 +30,7 @@ func GetWriter(output string, dir string, force bool) (out io.Writer, err error)
 		return
 	}
 
-	err = os.MkdirAll(dir, 0700)
+	err = os.MkdirAll(path.Dir(filename), 0700)
 	if err != nil {
 		return
 	}
