@@ -22,7 +22,9 @@ Options:
 	opts, _ := docopt.ParseDoc(usage)
 	err := cli.Eval(opts)
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		if !opts["--silent"].(bool) {
+			fmt.Fprint(os.Stderr, err)
+		}
 		os.Exit(1)
 	}
 }
