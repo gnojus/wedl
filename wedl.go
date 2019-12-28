@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var version string
+var version string = "v0.1.0"
 
 func main() {
 	usage := `
