@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -44,7 +44,24 @@ func GetDownloadResponse(URL string) (response *http.Response, err error) {
 	if err != nil {
 		return
 	}
-	return
+	req, err = createRequest("GET", link, nil, nil)
+	if err != nil {
+		return
+	}
+	resp, err = client.Do(req)
+	if err != nil {
+		return
+	}
+	return resp, nil
+}
+
+func FilenameFromUrl(URL string) string {
+	reg := regexp.MustCompile(`/([^/]+)\?`)
+	tmp := reg.FindStringSubmatch(URL)
+	if tmp != nil {
+		return tmp[1]
+	}
+	return ""
 }
 
 func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
