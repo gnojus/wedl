@@ -108,7 +108,7 @@ func getCookieValue(name string, resp *http.Response) (out string, exists bool) 
 }
 
 func findVar(prefix string, body []byte) (out string, exists bool) {
-	reg := regexp.MustCompile(prefix + `(.+)"`)
+	reg := regexp.MustCompile(prefix + `([^"]+)"`)
 	tmp := reg.FindSubmatch(body)
 	if tmp != nil {
 		out = string(tmp[1])
