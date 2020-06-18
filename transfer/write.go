@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-func GetWriter(output string, dir string, force bool) (out io.Writer, err error) {
+func GetWriter(output string, dir string, force bool) (out io.WriteCloser, err error) {
 	if output == "-" {
 		out = os.Stdout
 		return

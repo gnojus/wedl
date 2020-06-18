@@ -17,6 +17,7 @@ type headers map[string]string
 type requestData struct {
 	Security_hash  string `json:"security_hash"`
 	Domain_user_id string `json:"domain_user_id"`
+	RecipientId    string `json:"recipient_id"`
 }
 
 type transferData struct {
@@ -83,7 +84,6 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	if err != nil {
 		return
 	}
-
 	var result map[string]interface{}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
@@ -114,6 +114,8 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 	if out.req_data.Domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
 		return out, errors.New("Unable to get domain user id")
 	}
+	out.req_data.RecipientId, _ = findVar(`"recipient_id":"`, body)
+
 	if out.wt_session, ok = getCookieValue("_wt_session", resp); !ok {
 		return out, errors.New("Unable to get _wt_session cookie")
 	}
