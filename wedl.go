@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/Nojus297/wedl/cli"
 	"github.com/docopt/docopt-go"
-	"os"
 )
 
-var version string = "v0.1.0"
+var version string = "unspecified"
 
 func main() {
 	usage := `

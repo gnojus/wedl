@@ -16,8 +16,9 @@ type headers map[string]string
 
 type requestData struct {
 	Security_hash  string `json:"security_hash"`
-	Domain_user_id string `json:"domain_user_id"`
-	RecipientId    string `json:"recipient_id"`
+	Domain_user_id string `json:"domain_user_id,omitempty"`
+	RecipientId    string `json:"recipient_id,omitempty"`
+	Intent         string `json:"intent"`
 }
 
 type transferData struct {
@@ -92,7 +93,11 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	if URL, ok := result["direct_link"].(string); ok {
 		return URL, nil
 	}
-	return "", errors.New("Unable to find direct link")
+	message := "Unable to get direct link"
+	if e, ok := result["message"].(string); ok {
+		message += ": " + e
+	}
+	return "", errors.New(message)
 }
 
 func getTransferData(resp *http.Response) (out transferData, err error) {
@@ -115,6 +120,7 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 		return out, errors.New("Unable to get domain user id")
 	}
 	out.req_data.RecipientId, _ = findVar(`"recipient_id":"`, body)
+	out.req_data.Intent = "entire_transfer"
 
 	if out.wt_session, ok = getCookieValue("_wt_session", resp); !ok {
 		return out, errors.New("Unable to get _wt_session cookie")
