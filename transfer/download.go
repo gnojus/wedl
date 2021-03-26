@@ -12,20 +12,21 @@ import (
 
 const baseApi string = "https://wetransfer.com/api/v4"
 
+var urlRegex = regexp.MustCompile(".+/downloads/([^/]+)(/([^/]+))?/([^/]+)")
+
 type headers map[string]string
 
 type requestData struct {
-	Security_hash  string `json:"security_hash"`
-	Domain_user_id string `json:"domain_user_id,omitempty"`
-	RecipientId    string `json:"recipient_id,omitempty"`
-	Intent         string `json:"intent"`
+	SecurityHash string `json:"security_hash"`
+	RecipientId  string `json:"recipient_id,omitempty"`
+	Intent       string `json:"intent"`
 }
 
 type transferData struct {
-	transfer_id string
-	csrf_token  string
-	wt_session  string
-	req_data    requestData
+	transferId string
+	csrfToken  string
+	wtSession  string
+	reqData    requestData
 }
 
 func GetDownloadResponse(URL string) (response *http.Response, err error) {
@@ -67,12 +68,12 @@ func FilenameFromUrl(URL string) string {
 }
 
 func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
-	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transfer_id)
+	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transferId)
 	req, err := createRequest("POST", url, headers{
-		"x-csrf-token": data.csrf_token,
-		"cookie":       "_wt_session=" + data.wt_session,
+		"x-csrf-token": data.csrfToken,
+		"cookie":       "_wt_session=" + data.wtSession,
 		"content-type": "application/json",
-	}, data.req_data)
+	}, data.reqData)
 	if err != nil {
 		return
 	}
@@ -107,22 +108,20 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 		return
 	}
 	var ok bool
-	if out.transfer_id, ok = findVar(`var _preloaded_transfer_ = {"id":"`, body); !ok {
-		return out, errors.New("Unable to get transfer id")
+	matches := urlRegex.FindStringSubmatch(resp.Request.URL.String())
+	if len(matches) < 4 {
+		return out, errors.New("Unable to parse download url")
 	}
-	if out.csrf_token, ok = findVar(`<meta name="csrf-token" content="`, body); !ok {
+	out.transferId = matches[1]
+	out.reqData.RecipientId = matches[3]
+	out.reqData.SecurityHash = matches[4]
+
+	if out.csrfToken, ok = findVar(`<meta name="csrf-token" content="`, body); !ok {
 		return out, errors.New("Unable to get csrf token")
 	}
-	if out.req_data.Security_hash, ok = findVar(`"security_hash":"`, body); !ok {
-		return out, errors.New("Unable to get security hash")
-	}
-	if out.req_data.Domain_user_id, ok = findVar(`user: {"key":"`, body); !ok {
-		return out, errors.New("Unable to get domain user id")
-	}
-	out.req_data.RecipientId, _ = findVar(`"recipient_id":"`, body)
-	out.req_data.Intent = "entire_transfer"
+	out.reqData.Intent = "entire_transfer"
 
-	if out.wt_session, ok = getCookieValue("_wt_session", resp); !ok {
+	if out.wtSession, ok = getCookieValue("_wt_session", resp); !ok {
 		return out, errors.New("Unable to get _wt_session cookie")
 	}
 	return
