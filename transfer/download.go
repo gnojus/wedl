@@ -70,9 +70,10 @@ func FilenameFromUrl(URL string) string {
 func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
 	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transferId)
 	req, err := createRequest("POST", url, headers{
-		"x-csrf-token": data.csrfToken,
-		"cookie":       "_wt_session=" + data.wtSession,
-		"content-type": "application/json",
+		"X-CSRF-Token":     data.csrfToken,
+		"cookie":           "_wt_session=" + data.wtSession,
+		"content-type":     "application/json",
+		"X-Requested-With": "XMLHttpRequest",
 	}, data.reqData)
 	if err != nil {
 		return
@@ -86,19 +87,22 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	if err != nil {
 		return
 	}
-	var result map[string]interface{}
+	var result interface{}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		return
 	}
-	if URL, ok := result["direct_link"].(string); ok {
-		return URL, nil
+	if dict, ok := result.(map[string]interface{}); ok {
+		if URL, ok := dict["direct_link"].(string); ok {
+			return URL, nil
+		}
+		message := "Unable to get direct link"
+		if e, ok := dict["message"].(string); ok {
+			message += ": " + e
+		}
+		return "", errors.New(message)
 	}
-	message := "Unable to get direct link"
-	if e, ok := result["message"].(string); ok {
-		message += ": " + e
-	}
-	return "", errors.New(message)
+	return "", fmt.Errorf("Invalid download request response: %s", body)
 }
 
 func getTransferData(resp *http.Response) (out transferData, err error) {
