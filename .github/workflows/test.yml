@@ -1,0 +1,26 @@
+name: Test latest release
+
+on:
+  workflow_dispatch:
+  
+  release:
+  
+  schedule:
+    - cron: '25 0/3 * * *'
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download latest release
+      run: |
+        curl -L https://github.com/${{ github.repository }}/releases/latest/download/wedl-linux-amd64 > wedl 
+        chmod +x ./wedl
+        
+    - name: Download wetransfer file
+      run: ./wedl https://nerds.wetransfer.com/downloads/0b63000458bbf916a69ffdd7d21e7d7b20190412145718/10718e
+      
+    - name: Verify downloaded file
+      run: | 
+        echo "cbab0d477327200732380c347b6288b7  wtclient-dist.zip" | md5sum --check
