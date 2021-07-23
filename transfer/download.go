@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"regexp"
 )
 
@@ -62,7 +63,8 @@ func FilenameFromUrl(URL string) string {
 	reg := regexp.MustCompile(`/([^/]+)\?`)
 	tmp := reg.FindStringSubmatch(URL)
 	if tmp != nil {
-		return tmp[1]
+		s, _ := url.QueryUnescape(tmp[1])
+		return s
 	}
 	return ""
 }
@@ -71,7 +73,6 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transferId)
 	req, err := createRequest("POST", url, headers{
 		"X-CSRF-Token":     data.csrfToken,
-		"cookie":           "_wt_session=" + data.wtSession,
 		"content-type":     "application/json",
 		"X-Requested-With": "XMLHttpRequest",
 	}, data.reqData)
@@ -125,18 +126,6 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 	}
 	out.reqData.Intent = "entire_transfer"
 
-	if out.wtSession, ok = getCookieValue("_wt_session", resp); !ok {
-		return out, errors.New("Unable to get _wt_session cookie")
-	}
-	return
-}
-
-func getCookieValue(name string, resp *http.Response) (out string, exists bool) {
-	for _, cookie := range resp.Cookies() {
-		if cookie.Name == name {
-			return cookie.Value, true
-		}
-	}
 	return
 }
 
