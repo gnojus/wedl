@@ -21,10 +21,11 @@ Options:
   -p PATH --path=PATH	 Downloaded files directory.
   -s --silent            Silent. Do not output anything to stderr.
   -f --force             Overwrite files if needed.
+  -i --info              Write download info to stdout and exit.
 ```
 
 ## Instaling
-Download binaries from [here](https://github.com/Nojus297/wedl/releases). 
+Download binaries from [here](https://github.com/nojus297/wedl/releases). 
 
 Or compile from source:
 ```bash

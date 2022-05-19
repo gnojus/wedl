@@ -30,13 +30,19 @@ type transferData struct {
 	reqData    requestData
 }
 
-func GetDownloadResponse(URL string) (response *http.Response, err error) {
+type DlResponse struct {
+	DlUrl      string `json:"dl_url"`
+	DlSize     int    `json:"dl_size"`
+	DlFilename string `json:"dl_filename"`
+}
+
+func GetDlResponse(URL string) (resp *http.Response, r DlResponse, err error) {
 	client := &http.Client{}
 	req, err := createRequest("GET", URL, nil, nil)
 	if err != nil {
 		return
 	}
-	resp, err := client.Do(req)
+	resp, err = client.Do(req)
 	if err != nil {
 		return
 	}
@@ -56,7 +62,11 @@ func GetDownloadResponse(URL string) (response *http.Response, err error) {
 	if err != nil {
 		return
 	}
-	return resp, nil
+	return resp, DlResponse{
+		DlUrl:      link,
+		DlSize:     int(resp.ContentLength),
+		DlFilename: FilenameFromUrl(link),
+	}, nil
 }
 
 func FilenameFromUrl(URL string) string {

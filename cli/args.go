@@ -10,6 +10,7 @@ type args struct {
 	Path   string
 	Silent bool
 	Force  bool
+	Info   bool
 	stdout bool
 }
 

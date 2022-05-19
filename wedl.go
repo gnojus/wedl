@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Nojus297/wedl/cli"
 	"github.com/docopt/docopt-go"
+	"github.com/nojus297/wedl/cli"
 )
 
 var version string = "unspecified"
@@ -22,6 +22,7 @@ Options:
   -p PATH --path=PATH	 Downloaded files directory.
   -s --silent            Silent. Do not output anything to stderr.
   -f --force             Overwrite files if needed.
+  -i --info              Write download info to stdout and exit.
   `
 	opts, _ := docopt.ParseArgs(usage, os.Args[1:], version)
 	err := cli.Eval(opts)

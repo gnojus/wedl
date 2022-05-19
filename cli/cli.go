@@ -1,12 +1,14 @@
 package cli
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Nojus297/wedl/transfer"
-	"github.com/cheggaaa/pb"
 	"io"
 	"os"
+
+	"github.com/cheggaaa/pb"
+	"github.com/nojus297/wedl/transfer"
 )
 
 func Eval(opts map[string]interface{}) (err error) {
@@ -14,7 +16,7 @@ func Eval(opts map[string]interface{}) (err error) {
 	if err != nil {
 		return
 	}
-	resp, err := transfer.GetDownloadResponse(parsed.Url)
+	resp, r, err := transfer.GetDlResponse(parsed.Url)
 	if err != nil {
 		return
 	}
@@ -24,6 +26,11 @@ func Eval(opts map[string]interface{}) (err error) {
 	}
 	if parsed.Output == "" {
 		return errors.New("Canot find any filename")
+	}
+	if parsed.Info {
+		b, _ := json.Marshal(r)
+		fmt.Println(string(b))
+		return
 	}
 	writer, err := transfer.GetWriter(parsed.Output, parsed.Path, parsed.Force)
 	if err != nil {
