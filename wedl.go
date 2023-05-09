@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/docopt/docopt-go"
-	"github.com/nojus297/wedl/cli"
+	"github.com/gnojus/wedl/cli"
 )
 
 var version string = "unspecified"

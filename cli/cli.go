@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/cheggaaa/pb"
-	"github.com/nojus297/wedl/transfer"
+	"github.com/gnojus/wedl/transfer"
 )
 
 func Eval(opts map[string]interface{}) (err error) {

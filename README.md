@@ -1,5 +1,5 @@
 # wedl
-[![Test latest release](https://github.com/nojus297/wedl/actions/workflows/test.yml/badge.svg)](https://github.com/nojus297/wedl/actions/workflows/test.yml)
+[![Test latest release](https://github.com/gnojus/wedl/actions/workflows/test.yml/badge.svg)](https://github.com/gnojus/wedl/actions/workflows/test.yml)
 
 ## Command line utility to download from wetransfer 
 Easily download from wetransfer.com in the command line.
@@ -25,15 +25,15 @@ Options:
 ```
 
 ## Instaling
-Download binaries from [here](https://github.com/nojus297/wedl/releases). 
+Download binaries from [here](https://github.com/gnojus/wedl/releases). 
 
 Or compile from source:
 ```bash
-$ git clone https://github.com/nojus297/wedl.git
+$ git clone https://github.com/gnojus/wedl.git
 $ cd wedl 
 $ make
 ```
 Or just go get:
 ```bash
-$ go get github.com/nojus297/wedl
+$ go get github.com/gnojus/wedl
 ```

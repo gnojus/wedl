@@ -1,4 +1,4 @@
-module github.com/nojus297/wedl
+module github.com/gnojus/wedl
 
 go 1.18
 

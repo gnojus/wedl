@@ -25,7 +25,6 @@ type requestData struct {
 
 type transferData struct {
 	transferId string
-	csrfToken  string
 	wtSession  string
 	reqData    requestData
 }
@@ -82,7 +81,6 @@ func FilenameFromUrl(URL string) string {
 func getDownloadLink(client *http.Client, data transferData) (URL string, err error) {
 	url := fmt.Sprintf("%s/transfers/%s/download", baseApi, data.transferId)
 	req, err := createRequest("POST", url, headers{
-		"X-CSRF-Token":     data.csrfToken,
 		"content-type":     "application/json",
 		"X-Requested-With": "XMLHttpRequest",
 	}, data.reqData)
@@ -118,11 +116,10 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 
 func getTransferData(resp *http.Response) (out transferData, err error) {
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return
 	}
-	var ok bool
 	matches := urlRegex.FindStringSubmatch(resp.Request.URL.String())
 	if len(matches) < 4 {
 		return out, errors.New("Unable to parse download url")
@@ -131,9 +128,6 @@ func getTransferData(resp *http.Response) (out transferData, err error) {
 	out.reqData.RecipientId = matches[3]
 	out.reqData.SecurityHash = matches[4]
 
-	if out.csrfToken, ok = findVar(`<meta name="csrf-token" content="`, body); !ok {
-		return out, errors.New("Unable to get csrf token")
-	}
 	out.reqData.Intent = "entire_transfer"
 
 	return
