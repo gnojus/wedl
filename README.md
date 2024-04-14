@@ -8,11 +8,11 @@ Easily download from wetransfer.com in the command line.
 
 Uses unofficial wetransfer API used when downloading with a browser.
 
-Written in go.
+Written in Go.
 
 ## Usage
 
-```
+```bash
 $ wedl --help
 Usage:
   wedl [options] <URL>
@@ -21,7 +21,7 @@ Options:
   -h --help              Show this screen.
   -v --version           Print version and exit.
   -o FILE --output=FILE  Output file. Use - for stdout.
-  -p PATH --path=PATH  Downloaded files directory.
+  -p PATH --path=PATH    Downloaded files directory.
   -s --silent            Silent. Do not output anything to stderr.
   -f --force             Overwrite files if needed.
   -i --info              Write download info to stdout and exit.
