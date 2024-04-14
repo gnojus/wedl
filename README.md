@@ -29,7 +29,13 @@ Options:
 
 ## Instaling
 
-Download binaries from [here](https://github.com/gnojus/wedl/releases).
+Download binaries from [releases](https://github.com/gnojus/wedl/releases).
+
+Or compile from source and install with the [Go toolchain](https://go.dev/dl/):
+
+```bash
+go install github.com/gnojus/wedl@latest
+```
 
 ### Linux and MacOS
 
@@ -38,13 +44,7 @@ Or compile from source:
 ```bash
 git clone https://github.com/gnojus/wedl.git
 cd wedl 
-make
-```
-
-Or just go get:
-
-```bash
-go get github.com/gnojus/wedl
+go build
 ```
 
 ### Windows
@@ -56,10 +56,14 @@ git clone https://github.com/gnojus/wedl.git
 cd wedl
 go mod download
 
-# Build executable
+# Build
+
+## Build executable
 go build
 
-# Build with -output flag
+---------
+
+## Or Build with -output flag
 go build -o wedl.exe wedl.go
 ```
 
