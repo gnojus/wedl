@@ -3,12 +3,31 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/docopt/docopt-go"
 	"github.com/gnojus/wedl/cli"
 )
 
-var version string = "unspecified"
+var version string = ""
+
+func resolveVersion() string {
+	if version != "" {
+		return version
+	}
+	version = "unspecified"
+	bi, ok := debug.ReadBuildInfo()
+	if !ok {
+		return version
+	}
+	version = bi.Main.Version
+	for _, s := range bi.Settings {
+		if s.Key == "vcs.revision" {
+			version += "+" + s.Value
+		}
+	}
+	return version
+}
 
 func main() {
 	usage := `
@@ -24,7 +43,7 @@ Options:
   -f --force             Overwrite files if needed.
   -i --info              Write download info to stdout and exit.
   `
-	opts, _ := docopt.ParseArgs(usage, os.Args[1:], version)
+	opts, _ := docopt.ParseArgs(usage, os.Args[1:], resolveVersion())
 	err := cli.Eval(opts)
 	if err != nil {
 		if !opts["--silent"].(bool) {

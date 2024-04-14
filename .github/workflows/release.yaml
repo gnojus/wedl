@@ -1,0 +1,44 @@
+name: Build and release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ["386", amd64, arm64]
+        exclude:
+          - goarch: "386"
+            goos: darwin
+          - goarch: arm64
+            goos: windows
+        include:
+          - goos: darwin
+            os: macos-latest
+          - goos: linux
+            os: ubuntu-latest
+          - goos: windows
+            os: ubuntu-latest
+            suffix: .exe
+    runs-on: ${{ matrix.os }}          
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: stable
+
+      - name: Build
+        run: go build -ldflags "-X main.version=$GITHUB_REF_NAME" -o wedl-$GOOS-$GOARCH${{ matrix.suffix }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: wedl-*-*

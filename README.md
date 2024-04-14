@@ -6,7 +6,7 @@ Easily download from wetransfer.com in the command line.
 
 Uses unofficial wetransfer API used when downloading with a browser.
 
-Written in go.
+Written in Go.
 
 ## Usage
 ```
@@ -25,15 +25,16 @@ Options:
 ```
 
 ## Instaling
-Download binaries from [here](https://github.com/gnojus/wedl/releases). 
+Download binaries from [releases](https://github.com/gnojus/wedl/releases). 
 
-Or compile from source:
-```bash
-$ git clone https://github.com/gnojus/wedl.git
-$ cd wedl 
-$ make
+Or compile from source and install with the [Go toolchain](https://go.dev/dl/):
 ```
-Or just go get:
-```bash
-$ go get github.com/gnojus/wedl
+go install github.com/gnojus/wedl@latest
+```
+
+Or build from a writeable source tree:
+```
+git clone https://github.com/gnojus/wedl.git
+cd wedl 
+go build
 ```
