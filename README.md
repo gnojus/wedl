@@ -51,17 +51,15 @@ go build
 
 Compile from source:
 
-```cmd
+```sh
 git clone https://github.com/gnojus/wedl.git
 cd wedl
-go mod download
 
-# Build
+:: Build
 
 ## Build executable
 go build
 
----------
 
 ## Or Build with -output flag
 go build -o wedl.exe wedl.go
@@ -79,25 +77,26 @@ go build -o wedl.exe wedl.go
 
 Run the executable:
 
-```cmd
+```sh
 wedl.exe --help
 ```
 
-### Others
+### Usage examples
 
-Or Run the executable:
-
-```cmd
-# Help
+```sh
+:: Help
 go run . --help
 
-# Standart Download
+:: Standart Download
 go run . https://go.wetransfer.com/responsibility #Download to stdout
 
-# Download to ./test/ directory
+:: Download to ./test/ directory
 go run . -p=test https://we.tl/responsibility
 
-# Download to downloaded.zip
+:: Download to downloaded.zip
 go run . -o=downloaded.zip https://we.tl/responsibility
+
+:: Write download info to stdout
+go run . -i https://we.tl/responsibility
 
 ```
