@@ -57,11 +57,11 @@ cd wedl
 
 :: Build
 
-## Build executable
+:: Build executable
 go build
 
 
-## Or Build with -output flag
+:: Or Build with -output flag
 go build -o wedl.exe wedl.go
 ```
 
@@ -88,7 +88,7 @@ wedl.exe --help
 go run . --help
 
 :: Standart Download
-go run . https://go.wetransfer.com/responsibility #Download to stdout
+go run . https://go.wetransfer.com/responsibility
 
 :: Download to ./test/ directory
 go run . -p=test https://we.tl/responsibility
