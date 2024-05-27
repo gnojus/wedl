@@ -33,7 +33,7 @@ Download binaries from [releases](https://github.com/gnojus/wedl/releases).
 
 Or compile from source and install with the [Go toolchain](https://go.dev/dl/):
 
-```bash
+```
 go install github.com/gnojus/wedl@latest
 ```
 
@@ -41,7 +41,7 @@ go install github.com/gnojus/wedl@latest
 
 Or compile from source:
 
-```bash
+```
 git clone https://github.com/gnojus/wedl.git
 cd wedl 
 go build
@@ -51,7 +51,7 @@ go build
 
 Compile from source:
 
-```sh
+```cmd
 git clone https://github.com/gnojus/wedl.git
 cd wedl
 
@@ -59,7 +59,6 @@ cd wedl
 
 :: Build executable
 go build
-
 
 :: Or Build with -output flag
 go build -o wedl.exe wedl.go
@@ -69,34 +68,33 @@ go build -o wedl.exe wedl.go
 
 ### Linux and MacOS
 
-```bash
+```
 ./wedl --help
 ```
 
 ### Windows
 
-Run the executable:
-
-```sh
+```
 wedl.exe --help
 ```
 
 ### Usage examples
 
 ```sh
-:: Help
+# Help
 go run . --help
 
-:: Standart Download
+# Standart Download
 go run . https://go.wetransfer.com/responsibility
 
-:: Download to ./test/ directory
+# Download to ./test/ directory
 go run . -p=test https://we.tl/responsibility
 
-:: Download to downloaded.zip
+# Download to downloaded.zip
 go run . -o=downloaded.zip https://we.tl/responsibility
 
-:: Write download info to stdout
+# Write download info to stdout
 go run . -i https://we.tl/responsibility
+# output: {"dl_url":"<dl_url>","dl_size":22344484,"dl_filename":"WeTransfer_Responsible_Business_Report_2020.pdf"}
 
 ```
