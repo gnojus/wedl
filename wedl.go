@@ -39,6 +39,7 @@ Options:
   -v --version           Print version and exit.
   -o FILE --output=FILE  Output file. Use - for stdout.
   -p PATH --path=PATH	 Downloaded files directory.
+  -P PASS --password=PASSWORD Use a password.
   -s --silent            Silent. Do not output anything to stderr.
   -f --force             Overwrite files if needed.
   -i --info              Write download info to stdout and exit.
