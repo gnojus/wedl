@@ -35,13 +35,14 @@ Usage:
   wedl [options] <URL>
 
 Options:
-  -h --help              Show this screen.
-  -v --version           Print version and exit.
-  -o FILE --output=FILE  Output file. Use - for stdout.
-  -p PATH --path=PATH	 Downloaded files directory.
-  -s --silent            Silent. Do not output anything to stderr.
-  -f --force             Overwrite files if needed.
-  -i --info              Write download info to stdout and exit.
+  -h --help                Show this screen.
+  -v --version             Print version and exit.
+  -o FILE --output=FILE    Output file. Use - for stdout.
+  -p PATH --path=PATH	   Downloaded files directory.
+  -P PASS --password=PASS  Use a password.
+  -s --silent              Silent. Do not output anything to stderr.
+  -f --force               Overwrite files if needed.
+  -i --info                Write download info to stdout and exit.
   `
 	opts, _ := docopt.ParseArgs(usage, os.Args[1:], resolveVersion())
 	err := cli.Eval(opts)

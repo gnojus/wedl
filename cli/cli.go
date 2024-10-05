@@ -16,7 +16,7 @@ func Eval(opts map[string]interface{}) (err error) {
 	if err != nil {
 		return
 	}
-	resp, r, err := transfer.GetDlResponse(parsed.Url)
+	resp, r, err := transfer.GetDlResponse(parsed.Url, parsed.Password)
 	if err != nil {
 		return
 	}

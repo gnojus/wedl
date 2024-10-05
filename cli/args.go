@@ -8,6 +8,7 @@ type args struct {
 	Url    string
 	Output string
 	Path   string
+	Password string
 	Silent bool
 	Force  bool
 	Info   bool

@@ -19,6 +19,7 @@ type headers map[string]string
 
 type requestData struct {
 	SecurityHash string `json:"security_hash"`
+	Password     string `json:"password"`
 	RecipientId  string `json:"recipient_id,omitempty"`
 	Intent       string `json:"intent"`
 }
@@ -35,7 +36,7 @@ type DlResponse struct {
 	DlFilename string `json:"dl_filename"`
 }
 
-func GetDlResponse(URL string) (resp *http.Response, r DlResponse, err error) {
+func GetDlResponse(URL string, password string) (resp *http.Response, r DlResponse, err error) {
 	client := &http.Client{}
 	req, err := createRequest("GET", URL, nil, nil)
 	if err != nil {
@@ -49,6 +50,7 @@ func GetDlResponse(URL string) (resp *http.Response, r DlResponse, err error) {
 	if err != nil {
 		return
 	}
+	data.reqData.Password = password
 	link, err := getDownloadLink(client, data)
 	if err != nil {
 		return
