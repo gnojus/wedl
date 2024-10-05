@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -13,7 +13,7 @@ import (
 
 const baseApi string = "https://wetransfer.com/api/v4"
 
-var urlRegex = regexp.MustCompile(".+/downloads/([^/]+)(/([^/]+))?/([^/]+)")
+var urlRegex = regexp.MustCompile(".+/downloads/([^/]+)(/([^/]+))?/([^/?&]+)")
 
 type headers map[string]string
 
@@ -92,7 +92,7 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 	if err != nil {
 		return
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return
 	}
@@ -116,7 +116,7 @@ func getDownloadLink(client *http.Client, data transferData) (URL string, err er
 
 func getTransferData(resp *http.Response) (out transferData, err error) {
 	defer resp.Body.Close()
-	_, err = ioutil.ReadAll(resp.Body)
+	_, err = io.ReadAll(resp.Body)
 	if err != nil {
 		return
 	}
