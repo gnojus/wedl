@@ -19,7 +19,7 @@ type headers map[string]string
 
 type requestData struct {
 	SecurityHash string `json:"security_hash"`
-	Password     string `json:"password"`
+	Password     string `json:"password,omitempty"`
 	RecipientId  string `json:"recipient_id,omitempty"`
 	Intent       string `json:"intent"`
 }
