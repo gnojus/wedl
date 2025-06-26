@@ -88,10 +88,10 @@ go run . --help
 go run . https://go.wetransfer.com/responsibility
 
 # Download to ./test/ directory
-go run . -p=test https://we.tl/responsibility
+go run . -p test https://we.tl/responsibility
 
 # Download to downloaded.zip
-go run . -o=downloaded.zip https://we.tl/responsibility
+go run . -o downloaded.zip https://we.tl/responsibility
 
 # Write download info to stdout
 go run . -i https://we.tl/responsibility
